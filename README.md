@@ -9,6 +9,7 @@
 현재 프로젝트는 Spring MVC 기반 PetLog 프로젝트의 **리팩토링 버전**입니다.  
 기존 프로젝트는 [Spring MVC 프로젝트](https://github.com/jisu-chang/spring-project)에서 확인할 수 있습니다.
 
+<br>
 ---
 
 ## 🐶 PetLog Web Project (Spring + Spring Boot 통합)
@@ -16,6 +17,7 @@
 Java와 Spring Framework 기반으로 개발한 웹 애플리케이션입니다.  
 초기에는 Spring MVC 구조로 시작하여, 이후 Spring Boot 기반으로 확장하며  
 소셜 로그인, 회원 기능 개선, 반응형 UI 등 실제 서비스 수준으로 기능을 발전시켰습니다.
+
 <br>
 
 ---
@@ -66,6 +68,7 @@ PC 화면
 ![모바일 화면](./assets/mobile.png)
 
 <br>
+
 ---
 
 
@@ -104,7 +107,8 @@ PC 화면
 - 전체 CSS 모듈화 및 UI 리팩토링 (폰트, 컬러, 버튼 통일 등)
 
 <br>
---
+
+---
 
 
 ## 🎯 추가 개선 및 보완 의지
@@ -119,7 +123,7 @@ PC 화면
 - 사용자 경험(UX)과 상호작용 강화를 중심으로 지속적으로 개선해나갈 계획입니다.
 <br>
 
---
+---
 
 
 ## ✨ 느낀 점
