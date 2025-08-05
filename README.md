@@ -4,6 +4,10 @@ Java와 Spring Framework 기반으로 개발한 웹 애플리케이션입니다.
 초기에는 Spring MVC 구조로 시작하여, 이후 Spring Boot 기반으로 확장하며  
 소셜 로그인, 회원 기능 개선, 반응형 UI 등 실제 서비스 수준으로 기능을 발전시켰습니다.
 
+# PetLog (Spring MVC)
+본 프로젝트는 Spring MVC 기반입니다.  
+최신 버전은 [Spring Boot 프로젝트](https://github.com/jisu-chang/springboot-project)에서 확인하세요.
+
 
 ---
 
