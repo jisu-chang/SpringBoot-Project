@@ -4,12 +4,12 @@
 - `PetLog_Boot/` : Spring Boot 기반 리팩토링 및 기능 확장 버전
 - `6조_PetLog_박다솜_창지수.pdf` : 팀 보고서
 
-  
+  <br>
 
 현재 프로젝트는 Spring MVC 기반 PetLog 프로젝트의 **리팩토링 버전**입니다.  
 기존 프로젝트는 [Spring MVC 프로젝트](https://github.com/jisu-chang/spring-project)에서 확인할 수 있습니다.
 
-
+<br>
 
 ---
 
