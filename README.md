@@ -9,17 +9,14 @@
 현재 프로젝트는 Spring MVC 기반 PetLog 프로젝트의 **리팩토링 버전**입니다.  
 기존 프로젝트는 [Spring MVC 프로젝트](https://github.com/jisu-chang/spring-project)에서 확인할 수 있습니다.
 
-<br>
-
 ---
-
 
 ## 🐶 PetLog Web Project (Spring + Spring Boot 통합)
 
 Java와 Spring Framework 기반으로 개발한 웹 애플리케이션입니다.  
 초기에는 Spring MVC 구조로 시작하여, 이후 Spring Boot 기반으로 확장하며  
 소셜 로그인, 회원 기능 개선, 반응형 UI 등 실제 서비스 수준으로 기능을 발전시켰습니다.
-
+<br>
 
 ---
 
@@ -41,7 +38,7 @@ Java와 Spring Framework 기반으로 개발한 웹 애플리케이션입니다.
 - 포도알 (적립 및 차감, 포도알 게이지)
 - 관리자 기능 (QnA 답변, 회원/게시판 관리, 포도알 지급, 아이템 관리)
 - CSS 기반 UI 구성 및 디자인 리팩토링
-
+<br>
 
 ### 💫⭐ Spring Boot에서 확장된 기능
 - **카카오 로그인** (OAuth2 인증 연동)
@@ -56,7 +53,7 @@ Java와 Spring Framework 기반으로 개발한 웹 애플리케이션입니다.
   - 모바일 웹에 최적화된 뷰 구성
   - 해상도별 스타일 적용(CSS 미디어 쿼리)
 - 전체 CSS 모듈화 및 UI 통일성 개선
-
+<br>
 
 ---
 
@@ -68,7 +65,7 @@ PC 화면
 모바일 화면  
 ![모바일 화면](./assets/mobile.png)
 
-
+<br>
 ---
 
 
@@ -84,7 +81,7 @@ PC 화면
 | Build Tool        | Maven                              | Gradle                           |
 | IDE               | Eclipse / IntelliJ IDEA            | IntelliJ IDEA                    |
 | Version Control   | Git, GitHub                        | Git, GitHub                      |
-
+<br>
 
 ---
 
@@ -106,7 +103,7 @@ PC 화면
 - **반응형 웹 UI 구현 추가**: 모바일 대응 중심으로 레이아웃 설계 및 CSS 미디어 쿼리 적용
 - 전체 CSS 모듈화 및 UI 리팩토링 (폰트, 컬러, 버튼 통일 등)
 
-
+<br>
 --
 
 
@@ -120,7 +117,7 @@ PC 화면
   - 내가 작성한 게시글에 대한 알림 기능 (댓글/좋아요 등)
   - 활동 이력 조회 기능
 - 사용자 경험(UX)과 상호작용 강화를 중심으로 지속적으로 개선해나갈 계획입니다.
-
+<br>
 
 --
 
@@ -144,7 +141,7 @@ Spring Boot로 리팩토링하면서는 **“왜 이렇게 나눠야 할까?”*
 
 앞으로는 RESTful API 설계, 테스트 코드, 배포 자동화 등  
 지금 구현한 기능들을 **더 유연하고 단단하게 관리할 수 있는 방법**들을 학습해나가고 싶습니다.
-
+<br>
 
 ---
 
