@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{top::menu}"></div>
+<head>
+    <meta charset="UTF-8">
+    <title>전체 회원 포도알 랭킹</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+          background-color: #fff6f6;
+          margin: 0;
+          padding: 0;
+          color: #333;
+          text-align: center;
+          padding-top: 90px;
+        }
+
+        .table-wrapper {
+          width: 95%;
+          max-width: 600px;
+          margin: 0 auto;
+          background-color: #fff;
+          border-radius: 16px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          padding: 20px 15px;
+          box-sizing: border-box;
+        }
+
+        caption {
+          font-size: 1.5em;
+          font-weight: bold;
+          color: #f48aa5;
+          margin-bottom: 20px;
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 10px;
+        }
+
+        th, td {
+          padding: 10px;
+          font-size: 0.9em;
+          border-bottom: 1px solid #eee;
+          text-align: center;
+        }
+
+        th {
+          background-color: #fff0f4;
+          color: #555;
+          font-weight: 600;
+        }
+
+        .rank-number {
+          font-weight: bold;
+          color: #5e478e;
+        }
+
+        .grape-count {
+          color: #8e44ad;
+          font-weight: bold;
+        }
+
+        @media screen and (max-width: 390px) {
+            body {
+                padding-top: 60px;
+            }
+
+            .table-wrapper {
+                padding: 15px 10px;
+                margin: 0 auto 30px auto;
+            }
+
+            caption {
+                font-size: 1.3em;
+                margin-bottom: 15px;
+            }
+
+            th, td {
+                padding: 8px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="table-wrapper">
+
+    <caption>🍇 전체 회원 포도알 랭킹 (내림차순)</caption>
+
+    <table>
+        <thead>
+        <tr>
+            <th>순위</th>
+            <th>회원 ID</th>
+            <th>회원번호</th>
+            <th>포도알 수</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user, status : ${list}">
+            <td class="rank-number" th:text="${status.index + 1}"></td>
+            <td th:text="${user.userLoginId}"></td>
+            <td th:text="${user.userId}"></td>
+            <td class="grape-count" th:text="${user.grapeCount + '개'}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

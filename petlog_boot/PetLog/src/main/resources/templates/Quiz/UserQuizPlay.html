@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{top::menu}"></div>
+<head>
+    <style>
+        .container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        }
+body {
+  background-color: #f9f4fc;
+  margin-top: 20px;
+  padding: 0;
+  font-family: 'Pretendard', sans-serif;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* 화면 전체 높이 확보 */
+}
+
+.quiz-insert-wrapper {
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  z-index: 1000;
+
+  display: flex;
+  gap: 10px; /* 버튼 간격 */
+}
+.quiz-insert-link {
+  font-size: 14px;
+  text-decoration: none;
+  color: #8658a8;
+  font-weight: 500;
+  padding: 6px 12px;
+  border: 1px solid #e0c9f2;
+  border-radius: 8px;
+  background-color: #fff;
+  transition: background 0.2s;
+}
+
+.quiz-insert-link:hover {
+  background-color: #f3e7fc;
+}
+
+.quiz-form {
+  background: #ffffff;
+  padding: 30px 40px;
+  width: 350px;            /* ✅ 고정 넓이 (반응형 제거) */
+  max-width: 350px;        /* ✅ 꼭 같이 고정 */
+  min-width: 350px;        /* ✅ 최소 넓이도 동일하게 */
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(200, 160, 220, 0.15);
+  border: 1px solid #ebd9f4;
+  text-align: left;
+
+  min-height: 380px; /* 고정 높이 설정 */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 내부 요소 정렬 */
+}
+
+.quiz-title {
+  font-size: 1.4em;
+  color: #8658a8;
+  margin-bottom: 20px;
+  min-height: 48px; /* 질문이 짧을 때도 균형 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.quiz-option {
+  width: 100%;           /* ✅ 전체 폼에 맞춤 */
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  font-size: 1.05em;
+  background: #fff7f4;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #f6d8e7;
+  word-break: break-word;
+}
+
+.quiz-option:hover {
+  background: #fde3ec;
+}
+
+.quiz-option span {
+  display: inline-block;
+  word-break: break-word;
+  width: 100%;
+}
+
+.quiz-option input[type="radio"] {
+  flex-shrink: 0;
+  transform: scale(1.1);
+  accent-color: #c59cf3;
+  margin-top: 2px;
+}
+
+.quiz-submit {
+  margin-top: 25px;
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #d9c7f3;
+  color: #fff;
+  font-size: 1.05em;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+.quiz-submit:hover {
+  background: #c29ee4;
+}
+
+.quiz-hint {
+  font-size: 0.95em;
+  color: #666;
+  text-align: center;
+  margin-top: 14px;
+  font-weight: 500;
+}
+
+    </style>
+</head>
+<body>
+<!-- 퀴즈 등록 버튼 (오른쪽 상단) -->
+<div th:if="${session.userRole == 'admin'}" class="quiz-insert-wrapper">
+    <a th:href="@{/QuizInput}" class="quiz-insert-link">퀴즈 등록</a>
+    <a th:href="@{/QuizOut}" class="quiz-insert-link">퀴즈 목록</a>
+</div>
+<!-- 퀴즈 출력 -->
+<div th:each="dto : ${dto}">
+    <form th:action="@{/QuizSave}" method="post" class="quiz-form" onsubmit="return onSubmitQuiz(this)">
+        <input type="hidden" name="quizId" th:value="${dto.quizId}" />
+        <input type="hidden" name="resultTime" id="resultTime" />
+
+        <h3 class="quiz-title">❓ <span th:text="${dto.quizQuestion}">문제 질문</span></h3>
+
+        <label class="quiz-option">
+            <input type="radio" name="quizAnswer" value="1" required>
+            <span th:text="${dto.quizOption1}">보기 1</span>
+        </label>
+        <label class="quiz-option">
+            <input type="radio" name="quizAnswer" value="2" required>
+            <span th:text="${dto.quizOption2}">보기 2</span>
+        </label>
+        <label class="quiz-option">
+            <input type="radio" name="quizAnswer" value="3" required>
+            <span th:text="${dto.quizOption3}">보기 3</span>
+        </label>
+        <label class="quiz-option">
+            <input type="radio" name="quizAnswer" value="4" required>
+            <span th:text="${dto.quizOption4}">보기 4</span>
+        </label>
+
+        <button type="submit" class="quiz-submit">제출하기</button>
+        <p class="quiz-hint">⏱ 풀이 시간은 자동으로 기록됩니다</p>
+    </form>
+</div>
+
+<!-- 모든 퀴즈 완료 시 -->
+<div th:if="${allDone}">
+    <script>
+        alert("🎉모든 퀴즈를 완료했습니다! 🐾멍냥 리스트로 이동합니다.");
+        window.location.href = "/UserQuizOut";
+    </script>
+</div>
+
+<script>
+    const startTime = Date.now();
+    function onSubmitQuiz(form) {
+      const endTime = Date.now();
+      const elapsed = Math.floor((endTime - startTime) / 1000);
+      form.querySelector("input[name='resultTime']").value = elapsed;
+      return true;
+    }
+</script>
+
+</body>
+</html>

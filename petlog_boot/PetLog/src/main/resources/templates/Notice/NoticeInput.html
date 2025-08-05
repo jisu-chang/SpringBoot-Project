@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{top::menu}"></div>
+
+<style>
+    body {
+      background-color: #fff6f6;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      margin: 80px auto;
+      background: #fff;
+      padding: 40px 24px;
+      border-radius: 16px;
+      box-sizing: border-box;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 26px;
+      color: #f48aa5;
+      font-weight: normal;
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      margin-bottom: 6px;
+      font-weight: bold;
+      font-size: 15px;
+      color: #555;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="file"],
+    .form-group textarea {
+      padding: 12px 14px;
+      font-size: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #fffdfd;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 140px;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #f48aa5;
+      box-shadow: 0 0 0 3px rgba(244, 138, 165, 0.2);
+      outline: none;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    input[type="submit"],
+    input[type="button"] {
+      background-color: #f48aa5;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover,
+    input[type="button"]:hover {
+      background-color: #db7093;
+    }
+    select {
+      padding: 12px 14px;
+      font-size: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #fffdfd;
+      width: 100%;
+      box-sizing: border-box;
+      font-family: 'Pretendard', sans-serif;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='16' height='16' fill='%23666' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 16px 16px;
+    }
+
+    select:focus {
+      border-color: #f48aa5;
+      box-shadow: 0 0 0 3px rgba(244, 138, 165, 0.2);
+      outline: none;
+    }
+
+
+    #contentDiv {
+      flex: 1;
+      min-height: 250px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 15px;
+      line-height: 1.6;
+      background: #fff;
+    }
+
+    #contentDiv img {
+      max-width: 200px !important;
+      height: auto !important;
+      display: block !important;
+      margin: 10px auto !important;
+    }
+
+    /* ✅ 모바일 최적화 */
+    @media screen and (max-width: 480px) {
+      .container {
+        padding: 24px 16px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      .form-group label {
+        font-size: 14px;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        font-size: 14px;
+      }
+
+      .form-actions {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      input[type="submit"],
+      input[type="button"] {
+        width: 100%;
+        padding: 10px;
+      }
+    }
+</style>
+<body>
+<head>
+
+</head>
+
+<div class="container">
+    <form th:action="@{/CommunityInSave}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="post_type" th:value="'normal'" />
+
+        <h2 style="text-align:center; color:#f48aa5; font-weight:normal;">공지사항 작성</h2>
+
+        <label for="postType">게시판 종류</label>
+        <select name="postType" id="postType" required>
+            <option value="normal">자유게시판</option>
+            <option value="notice" th:if="${#authentication.principal.userRole == 'admin'}" th:selected="${#authentication.principal.userRole == 'admin' ? 'selected' : ''}">
+                공지사항
+            </option>
+        </select>
+
+        <div class="form-group">
+            <label for="postTitle">제목</label>
+            <input type="text" id="postTitle" name="postTitle" required>
+        </div>
+
+        <div class="form-group">
+            <label for="postContent">내용</label>
+            <textarea name="postContent" id="postContent" rows="30" cols="50"></textarea>
+            <input type="hidden" name="hpostContent" id="hiddenContent">
+        </div>
+
+        <div class="form-group">
+            <label for="postImage">사진 추가</label>
+            <input type="file" id="postImage" name="postImage" accept="image/*" onchange="insertImage()" multiple>
+        </div>
+
+        <div class="form-actions">
+            <input type="submit" value="💾 저장">
+            <input type="button" value="❌ 취소" onclick="location.href='./main'">
+        </div>
+    </form>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{top::menu}"></div>
+
+<style>
+    body {
+      background-color: #fff6f6;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .post-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+      .post-header h2 {
+          font-size: 18px; /* 글씨 크기 줄임 */
+          font-weight: normal;
+          margin: 0;
+          color: #f48aa5;
+        }
+
+    .container {
+      max-width: 1000px;
+      margin: 60px auto;
+      background: #fff;
+      padding: 60px 80px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 26px;
+      color: #f48aa5;
+      font-weight: normal;
+      margin-top: 0;
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      gap: 10px;
+    }
+
+    .form-group label {
+      width: 80px;
+      font-weight: bold;
+      font-size: 15px;
+      color: #555;
+      padding-top: 10px;
+      text-align: right;
+    }
+
+    .form-group input[type="text"],
+    .form-group textarea {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #fffdfd;
+      font-family: 'Pretendard', sans-serif;
+      transition: all 0.2s ease-in-out;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      height: 120px;
+    }
+
+    .form-group img {
+      display: block;
+      margin: 12px auto 0;
+      max-width: 300px;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #f48aa5;
+      box-shadow: 0 0 0 3px rgba(244, 138, 165, 0.2);
+      outline: none;
+    }
+
+    .form-actions {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    input[type="submit"],
+    input[type="button"] {
+      background-color: #f48aa5;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: normal;
+      margin: 0 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover,
+    input[type="button"]:hover {
+      background-color: #db7093;
+    }
+
+    .profile-img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    .image-preview {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .image-preview img {
+      max-width: 150px;
+      height: auto;
+      border-radius: 8px;
+    }
+</style>
+
+<body>
+
+<div class="container">
+    <form th:action="@{/NoticeUpdateSave}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="post_readcnt" th:value="${dto.postReadcnt}" />
+        <input type="hidden" name="postType" th:value="${dto.postType}" />
+
+        <div class="post-header">
+            <!-- 로컬에서 저장한 프로필 이미지 -->
+            <img class="profile-img" th:if="${dto.user.profileimg?.startsWith('http')}" th:src="${dto.user.profileimg}" alt="프로필">
+            <img class="profile-img" th:if="${dto.user.profileimg == 'default.png'}" th:src="@{/image/default.png}" alt="기본이미지">
+            <img class="profile-img" th:if="${dto.user.profileimg != null and !dto.user.profileimg.startsWith('http') and dto.user.profileimg != 'default.png'}" th:src="@{'/profileimg/' + ${dto.user.profileimg}}" alt="프로필">
+            <h2><span th:text="${dto.user.userLoginId} + '님의 수정 게시물'"></span></h2>
+        </div>
+
+        <div class="form-group">
+            <label for="post_title">제목</label>
+            <input type="text" id="post_title" name="postTitle" th:value="${dto.postTitle}">
+        </div>
+
+        <div class="form-group">
+            <label for="userLoginId">작성자</label>
+            <input type="text" id="userLoginId" name="userLoginId" th:value="${dto.user.userLoginId}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="post_date">작성일자</label>
+            <input type="text" id="post_date" name="postDate" th:value="${dto.postDate}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="post_content">내용</label>
+            <textarea id="post_content" name="postContent" th:text="${dto.postContent}"></textarea>
+        </div>
+
+        <!-- form-group 밖에서 이미지 따로 -->
+        <div class="image-preview">
+            <img th:if="${dto.postImage != null and !#strings.isEmpty(dto.postImage)}"
+                 th:src="@{'/communityimg/' + ${dto.postImage}}"
+                 style="max-width: 100%; border-radius: 8px;" />
+        </div>
+
+        <div class="form-group">
+            <label for="post_image">사진 추가</label>
+            <input type="hidden" name="dfname" th:value="${dto.postImage}" />
+            <input type="file" id="post_image" name="postImage" accept="image/*" onchange="insertImage()" multiple>
+        </div>
+
+        <div class="form-actions">
+            <input type="submit" value="💾 수정">
+            <input type="button" value="취소" onclick="history.back();">
+        </div>
+    </form>
+</div>
+
+</body>
+
+</html>

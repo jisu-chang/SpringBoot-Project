@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>카카오 회원가입</title>
+    <style>
+        body {
+          background-color: #fffef7;
+          font-family: 'Pretendard', sans-serif;
+          padding-top: 70px;
+          padding-bottom: 100px;
+          display: flex;
+          justify-content: center;
+        }
+
+        .container {
+          max-width: 480px;
+          width: 90%;
+          background-color: #fff;
+          padding: 40px;
+          border-radius: 20px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+          text-align: center;
+          border: 2px solid #ffe98a;
+        }
+
+        h2 {
+          color: #3c1e1e;
+          font-size: 24px;
+          margin-bottom: 25px;
+        }
+
+      .profile-img-only {
+          width: 180px;
+          height: 180px;
+          border-radius: 50%;
+          object-fit: cover;
+          display: block;
+          margin: 20px auto;
+          box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+
+        form {
+          text-align: left;
+        }
+
+        label {
+          font-weight: 600;
+          color: #5b3c11;
+          font-size: 15px;
+          display: block;
+          margin-bottom: 6px;
+          margin-top: 16px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+          width: 100%;
+          padding: 12px;
+          border: 1px solid #ddd;
+          border-radius: 10px;
+          box-sizing: border-box;
+          font-size: 15px;
+        }
+
+        .id-check {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+        }
+
+        .id-check input {
+          flex: 1;
+        }
+
+        .id-check button {
+          padding: 10px 14px;
+          font-size: 14px;
+          background-color: #fff3a0;
+          border: 1px solid #e0c978;
+          border-radius: 10px;
+          cursor: pointer;
+          font-weight: bold;
+        }
+
+        .id-check button:hover {
+          background-color: #ffe772;
+        }
+
+        .info-text {
+          font-size: 13px;
+          color: #999;
+          text-align: center;
+          margin-bottom: 20px;
+        }
+
+        input[type="submit"] {
+          margin-top: 25px;
+          width: 100%;
+          padding: 14px;
+          font-size: 16px;
+          border: none;
+          border-radius: 12px;
+          background-color: #FEE500;
+          color: #3c1e1e;
+          font-weight: bold;
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+        }
+
+        input[type="submit"]:hover {
+          background-color: #ffea00;
+        }
+
+        #idCheckResult {
+          font-size: 13px;
+          margin-top: 4px;
+        }
+    </style>
+</head>
+
+<body>
+<div th:replace="~{top::menu}"></div>
+
+<div class="container">
+    <h2>🐤 카카오 회원가입</h2>
+    <form action="/signUpKakaoSave" method="post" enctype="multipart/form-data">
+
+        <img class="profile-img-only" th:src="${kakao_profile}" alt="카카오 프로필 이미지" />
+        <input type="hidden" name="profileimgName" th:value="${kakao_profile}" />
+        <p class="info-text">※ 프로필 이미지는 카카오에서 가져왔어요.<br>마이페이지에서 언제든지 변경할 수 있어요.</p>
+
+        <div class="id-check">
+            <input type="text" id="userLoginId" name="userLoginId" placeholder="아이디를 입력하세요" required />
+            <button type="button" onclick="checkId()">중복확인</button>
+        </div>
+        <p id="idCheckResult" style="color: red;"></p>
+
+        <label>비밀번호</label>
+        <input type="password" name="password" placeholder="비밀번호를 입력하세요" required />
+
+        <label>이름</label>
+        <input type="text" name="name" th:value="${kakao_name}" placeholder="이름을 입력하세요" />
+
+        <label>전화번호</label>
+        <input type="text" name="phone" placeholder="010-0000-0000" required />
+
+        <label>이메일</label>
+        <input type="email" name="email" th:value="${kakao_email}" placeholder="이메일을 입력하세요" />
+
+        <input type="submit" value="🐥 회원가입 완료" />
+    </form>
+</div>
+
+<script>
+    function checkId() {
+      const userLoginId = document.getElementById("userLoginId").value;
+      fetch(`/idCheck?userLoginId=${userLoginId}`)
+        .then(res => res.text())
+        .then(result => {
+          const resultElem = document.getElementById("idCheckResult");
+          if (result === "duplicate") {
+            resultElem.textContent = "이미 사용 중인 아이디입니다.";
+            resultElem.style.color = "red";
+          } else {
+            resultElem.textContent = "사용 가능한 아이디입니다!";
+            resultElem.style.color = "green";
+          }
+        });
+    }
+</script>
+</body>
+</html>

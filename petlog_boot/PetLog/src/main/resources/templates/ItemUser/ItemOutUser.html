@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{top::menu}"></div>
+    <meta charset="UTF-8">
+    <title>아이템 상점</title>
+    <style>
+        body {
+          background-color: #fff6f6;
+          margin: 0;
+          padding: 0;
+          color: #333;
+        }
+        h2 {
+          text-align: center;
+          color: #f48aa5;
+          font-weight: normal;
+          font-size: 1.8em;
+          margin-bottom: 30px;
+        }
+        .btn {
+          background-color: #ffe1e1;
+          color: #333;
+          border: none;
+          padding: 8px 20px;
+          border-radius: 10px;
+          font-weight: normal;
+          cursor: pointer;
+          text-decoration: none;
+          display: inline-block;
+        }
+        .btn:hover {
+          background-color: #ffd2d2;
+        }
+        .table-wrapper {
+          background-color: white;
+          width: 100%;
+          max-width: 1000px;
+          margin: 100px auto 200px auto;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+          padding: 30px;
+          box-sizing: border-box;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 10px;
+          background-color: #fff;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+          border-radius: 8px;
+          overflow: hidden;
+        }
+        th, td {
+          padding: 14px 12px;
+          font-size: 1em;
+          border-bottom: 1px solid #eee;
+          text-align: center;
+        }
+        th {
+          background-color: #fff0f4;
+          color: #555;
+          font-weight: bold;
+        }
+        td img {
+          max-width: 70px;
+          height: auto;
+          border-radius: 12px;
+        }
+        td a {
+          color: #333;
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 18px;
+        }
+        td a:hover {
+          color: #d65b7b;
+          text-decoration: underline;
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                padding-top: 50px;
+            }
+            .table-wrapper {
+                margin: 20px auto 40px auto;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: none;
+            }
+            h2 {
+                font-size: 1.5em;
+                margin-bottom: 20px;
+            }
+            table {
+                border: none;
+                box-shadow: none;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                display: block;
+                margin-bottom: 15px;
+                border: 1px solid #eee;
+                border-radius: 8px;
+                background-color: #fff;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            }
+
+            td {
+                display: block;
+                text-align: left;
+                border-bottom: 1px dashed #eee;
+                padding: 10px 15px;
+                position: relative;
+                font-size: 0.95em;
+            }
+
+            td:last-child {
+                border-bottom: none;
+            }
+
+            td::before {
+                content: attr(data-label) ": ";
+                font-weight: bold;
+                color: #f06292;
+                display: inline-block;
+                width: 90px;
+                margin-right: 5px;
+            }
+
+            td:nth-of-type(5) img {
+                display: block;
+                margin: 5px auto 0;
+                max-width: 60px;
+                height: auto;
+            }
+
+            td:nth-of-type(6) form {
+                text-align: center;
+                margin-top: 10px;
+            }
+            td:nth-of-type(6) .btn {
+                padding: 8px 25px;
+                font-size: 1em;
+            }
+        }
+
+        .pagination {
+          display: flex;
+          justify-content: center;
+          gap: 8px;
+          margin-top: 20px;
+        }
+
+        .pagination a {
+          padding: 6px 12px;
+          border-radius: 6px;
+          background-color: #ffe1e1;
+          color: #333;
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+        .pagination a.active {
+          font-weight: bold;
+          background-color: #f48aa5;
+          color: white;
+        }
+
+        .pagination a:hover {
+          background-color: #ffd2d2;
+        }
+
+        .pagination a.disabled {
+          pointer-events: none;
+          opacity: 0.5;
+          cursor: default;
+          background-color: #eee;
+          color: #999;
+        }
+    </style>
+</head>
+<body>
+
+<div class="table-wrapper">
+    <h2>🎁 아이템 상점</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>아이템명</th>
+            <th>포도알</th>
+            <th>카테고리</th>
+            <th>아이템</th>
+            <th>아이템 구매</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="it : ${list}">
+            <td data-label="No." th:text="${it.itemId}"></td>
+            <td data-label="아이템명" th:text="${it.itemName}"></td>
+            <td data-label="포도알" th:text="${it.itemCost}"></td>
+            <td data-label="카테고리" th:text="${it.itemCategory}"></td>
+            <td data-label="아이템"><img th:src="@{'/image/' + ${it.itemImage}}"/></td>
+            <td data-label="아이템 구매">
+                <form th:action="@{/ItemUser/ItemDetail}" method="get">
+                    <input type="hidden" name="itemId" th:value="${it.itemId}" />
+                    <button type="submit" class="btn">🛒</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <a th:href="@{/ItemUser/ItemOutUser(page=${currentPage - 1})}"
+           th:classappend="${currentPage == 1} ? 'disabled' : ''">이전</a>
+
+        <a th:each="i : ${#numbers.sequence(1, totalPages)}"
+           th:href="@{/ItemUser/ItemOutUser(page=${i})}"
+           th:text="${i}"
+           th:classappend="${i == currentPage} ? 'active' : ''"></a>
+
+        <a th:href="@{/ItemUser/ItemOutUser(page=${currentPage + 1})}"
+           th:classappend="${currentPage == totalPages} ? 'disabled' : ''">다음</a>
+    </div>
+
+</div>
+</body>
+</html>

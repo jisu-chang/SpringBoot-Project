@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{top::menu}"></div>
+<head>
+  <meta charset="UTF-8">
+  <title>비밀번호 변경</title>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: 'Pretendard', sans-serif;
+      min-height: 100vh; /* 화면 전체 높이 확보 */
+      margin: 0;
+      display: flex;
+      justify-content: center; /* 가로 중앙 */
+      align-items: center;     /* 세로 중앙 */
+      padding: 70px 20px 100px; /* 상단, 좌우, 하단 여백 */
+      box-sizing: border-box;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      border: 2px solid #ffc1cc;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      background-color: #fff6f8; /* 배경색도 있으면 더 부드럽게 보여요 */
+    }
+    input[type="text"],
+    input[type="password"] {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px; /* 버튼 간격 */
+      margin-top: 20px; /* 인풋창과의 간격 */
+    }
+
+    button,
+    input[type="submit"],
+    input[type="reset"] {
+      padding: 10px 24px;
+      background-color: #f48aa5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-left: 10px;
+      width: auto;
+    }
+
+    /* hover 스타일은 hover에만 적용되도록! */
+    button:hover,
+    input[type="submit"]:hover,
+    input[type="reset"]:hover {
+      background-color: #db7093;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+    .success {
+      color: green;
+      margin-top: 10px;
+    }
+    ul#pwRules {
+      list-style: none;
+      padding-left: 0;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+    #pwRules li {
+      color: red;
+    }
+    #pwRules li.valid {
+      color: green;
+      font-weight: bold;
+    }
+    #pwMatchMsg {
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <h2>비밀번호 변경</h2>
+  <form th:action="@{/changePw}" method="post">
+    <input type="password" name="currentPw" placeholder="현재 비밀번호" required>
+
+    <input type="password" id="newPw" name="newPw" placeholder="새 비밀번호" required oninput="validatePassword()">
+    <ul id="pwRules">
+      <li id="rule-length">8~20자</li>
+      <li id="rule-combo">영문자 + 숫자 조합</li>
+      <li id="rule-space">공백 없음</li>
+    </ul>
+
+    <input type="password" id="newPwConfirm" name="newPwConfirm" placeholder="새 비밀번호 확인" required oninput="checkPasswordMatch()">
+    <span id="pwMatchMsg"></span>
+
+    <div class="btn-group">
+      <button type="submit">비밀번호 변경</button>
+      <button type="reset" th:onclick="history.back();">취소</button>
+    </div>
+  </form>
+
+  <p class="error" th:if="${error}" th:text="${error}"></p>
+  <p class="success" th:if="${success}" th:text="${success}"></p>
+</div>
+
+<script>
+  function validatePassword() {
+    const pw = document.getElementById("newPw").value;
+    const lengthCheck = pw.length >= 8 && pw.length <= 20;
+    const comboCheck = /[A-Za-z]/.test(pw) && /\d/.test(pw);
+    const spaceCheck = !/\s/.test(pw);
+
+    document.getElementById("rule-length").classList.toggle("valid", lengthCheck);
+    document.getElementById("rule-combo").classList.toggle("valid", comboCheck);
+    document.getElementById("rule-space").classList.toggle("valid", spaceCheck);
+  }
+
+  function checkPasswordMatch() {
+    const pw = document.getElementById("newPw").value;
+    const pwCheck = document.getElementById("newPwConfirm").value;
+    const msg = document.getElementById("pwMatchMsg");
+
+    if (pwCheck === "") {
+      msg.textContent = "";
+      return;
+    }
+
+    if (pw === pwCheck) {
+      msg.textContent = "비밀번호가 일치합니다.";
+      msg.style.color = "green";
+    } else {
+      msg.textContent = "비밀번호가 일치하지 않습니다.";
+      msg.style.color = "red";
+    }
+  }
+</script>
+</body>
+</html>

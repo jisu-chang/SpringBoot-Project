@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{top::menu}"></div>
+<head>
+  <meta charset="UTF-8" />
+  <title>일기 보기</title>
+  <style>
+    body {
+      background-color: #fff6f6;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    h2 {
+      text-align: center;
+      color: #d65b7b;
+      font-weight: normal;
+      font-size: 1.5em;
+      margin: 24px 0;
+    }
+
+    .btn {
+      background-color: #ffe1e1;
+      color: #333;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-weight: normal;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 0.95em;
+    }
+
+    .btn:hover {
+      background-color: #ffd2d2;
+    }
+
+    .table-wrapper {
+      background-color: white;
+      max-width: 800px;
+      margin: 80px auto 60px auto;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    table {
+      width: 100%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      background-color: #fff;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 12px 10px;
+      font-size: 0.9em;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+    }
+
+    th {
+      background-color: #fff0f4;
+      color: #555;
+      font-weight: bold;
+    }
+
+    td a {
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    td a:hover {
+      color: #d65b7b;
+      text-decoration: underline;
+    }
+
+    .no-diary {
+      text-align: center;
+      color: #c0392b;
+      font-weight: bold;
+      padding: 30px 0;
+      font-size: 1em;
+    }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.pagination a {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background-color: #ffe1e1;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pagination a.active {
+  font-weight: bold;
+  background-color: #f48aa5;
+  color: white;
+}
+
+.pagination a:hover {
+  background-color: #ffd2d2;
+}
+
+.pagination a.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: default;
+  background-color: #eee;
+  color: #999;
+}
+
+    @media screen and (min-width: 768px) {
+      .table-wrapper {
+        max-width: 900px;
+        padding: 30px;
+        margin-top: 90px;
+      }
+
+      table {
+        font-size: 1em;
+      }
+
+      th,
+      td {
+        padding: 14px 12px;
+      }
+
+      .btn {
+        font-size: 1em;
+        padding: 10px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="table-wrapper">
+  <h2 style="color: #f48aa5">📔 일기 보기</h2>
+
+  <div style="overflow: hidden; margin-bottom: 10px;">
+    <a th:href="@{/Diary/DiaryInput}" class="btn" style="float: right;">일기 쓰러 가기</a>
+  </div>
+
+  <div th:if="${diaryPage != null and !diaryPage.empty}">
+    <table>
+      <thead>
+      <tr>
+        <th>이름</th>
+        <th>일기 제목</th>
+        <th>날짜</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="di : ${diaryPage.content}">
+        <td th:text="${di.petName}"></td>
+        <td>
+          <a th:href="@{/Diary/DiaryDetail(diaryId=${di.diaryId})}" th:text="${di.diaryTitle}"></a>
+        </td>
+        <td th:text="${di.diaryDate}"></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- 페이징 영역 -->
+    <div class="pagination">
+      <!-- 이전 버튼 (첫 페이지면 disabled 클래스 적용) -->
+      <a th:href="@{/Diary/DiaryOut(page=${currentPage > 0 ? currentPage - 1 : 0})}"
+         th:classappend="${currentPage == 0} ? 'disabled' : ''">
+        이전
+      </a>
+
+      <!-- 페이지 번호 버튼 -->
+      <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+         th:href="@{/Diary/DiaryOut(page=${i})}"
+         th:text="${i + 1}"
+         th:classappend="${i == currentPage} ? 'active' : ''"></a>
+
+      <!-- 다음 버튼 (마지막 페이지면 disabled 클래스 적용) -->
+      <a th:href="@{/Diary/DiaryOut(page=${currentPage < totalPages - 1 ? currentPage + 1 : totalPages - 1})}"
+         th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+        다음
+      </a>
+    </div>
+  </div>
+
+  <div th:if="${diaryPage == null or diaryPage.empty}" class="no-diary">
+    작성된 일기가 없습니다.
+  </div>
+</div>
+</body>
+</html>

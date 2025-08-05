@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>마이페이지</title>
+  <style>
+    body {
+        background-color: #ffffff;
+        margin: 30;
+        padding: 70;
+        padding-top: 70px;
+        padding-bottom: 100px;
+    }
+    .container {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 20px 60px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    h1 {
+        font-size: 30px;
+        margin-top: 20px;
+        margin-bottom: 25px;
+        color: #333;
+    }
+    h3 {
+        font-size: 22px;
+        color: #555;
+        margin-top: 30px;
+    }
+    .nickname {
+        font-size: 24px;
+        font-weight: bold;
+        color: #f49fb6;
+        padding: 6px 14px;
+        border-radius: 20px;
+    }
+    .info-card {
+        background: #fff6f8;
+        border: 2px solid #ffc1cc;
+        border-radius: 20px;
+        padding: 30px;
+        margin: 25px auto;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        font-size: 15px;
+        color: #444;
+        word-break: keep-all;
+    }
+    .info-card p {
+        margin: 12px 0;
+        line-height: 1.6;
+        text-align: left;
+    }
+    .btn-group a {
+        width: 160px;
+        padding: 11px 11px;
+        text-align: center;
+        background-color: #f48aa5;
+        color: white;
+        text-decoration: none;
+        border-radius: 13px;
+        font-size: 14px;
+        font-weight: 600;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        white-space: nowrap;
+        letter-spacing: 0.5px;
+    }
+    .btn-group {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    .btn-group a:hover {
+        background-color: #ffc1cc;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+    .profile-frame-container {
+        position: relative;
+        width: 220px;
+        height: 220px;
+        margin: 0 auto 25px auto;
+    }
+    .profile-img {
+        position: absolute;
+        top: 35px;
+        left: 35px;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        object-fit: cover;
+        z-index: 1;
+    }
+    .frame-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 220px;
+        height: 220px;
+        z-index: 2;
+        pointer-events: none;
+        border-radius: 50%;
+    }
+    .with-border {
+        border: 5px solid #ffc1cc;
+        border-radius: 50%;
+        box-sizing: border-box;
+    }
+    .info-left {
+      text-align: left;
+      padding-left: 12px;
+      margin: 12px 0;
+      line-height: 1.8;
+    }
+    .info-text-wrapper {
+      text-align: left;
+      width: fit-content; /* 글자 내용에 맞는 너비 */
+      margin: 0 auto;    /* 가운데 정렬 (부모 기준) */
+      padding-top: 10px;
+    }
+    .info-text-wrapper p {
+      margin: 10px 0;
+      line-height: 1.6;
+    }
+    .info-text-wrapper strong {
+      display: inline-block;
+      width: 90px; /* 정렬 맞춤용 */
+    }
+      .grade-info-btn {
+        margin-left: 10px;
+        padding: 5px 10px;
+        background-color: #ffe6eb;
+        border-radius: 10px;
+        color: #d84d77;
+        font-weight: bold;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .grade-info-btn:hover {
+        background-color: #ffc1cc;
+        transform: translateY(-2px);
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      }
+     .point-info-box {
+        border-radius: 10px;
+        padding: 25px;
+        background: #fff0f4;
+
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      }
+      </style>
+</head>
+<body>
+
+<div th:replace="~{top::menu}"></div>
+
+<div class="container">
+  <h1>🐾 마이페이지</h1>
+  <div class="info-card">
+    <h3><span class="nickname" th:text="${list.name}"></span>님의 회원정보</h3>
+
+    <div class="profile-frame-container">
+      <img th:src="${list.profileimgName == null or list.profileimgName == 'default.png'
+            ? '/image/default.png' : (#strings.startsWith(list.profileimgName, 'http') or #strings.startsWith(list.profileimgName, 'https')
+            ? list.profileimgName: '/profileimg/' + list.profileimgName)}"  alt="프로필 이미지" class="profile-img"
+            th:classappend="${list.equippedFrameImageName == null or list.equippedFrameImageName.isEmpty()} ? 'with-border'" />
+
+      <img th:if="${list.equippedFrameImageName != null and !list.equippedFrameImageName.isEmpty()}"
+           th:src="@{/image/{fileName}(fileName=${list.equippedFrameImageName})}" alt="착용 중인 프레임"
+           class="frame-img" />
+    </div>
+
+    <div class="info-text-wrapper">
+      <p class="info-left">
+        <strong>🐾 아&nbsp;&nbsp;이&nbsp;&nbsp;디</strong>: <span th:text="${list.userLoginId}"></span>
+      </p>
+      <p class="info-left">
+        <strong>🧸 이&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;름</strong>: <span th:text="${list.name}"></span>
+      </p>
+      <p class="info-left">
+        <strong>☎️ 연&nbsp;&nbsp;락&nbsp;&nbsp;처</strong>: <span th:text="${list.phone}"></span>
+      </p>
+      <p class="info-left">
+        <strong>🍇 포&nbsp;&nbsp;도&nbsp;&nbsp;알</strong>: <span th:text="${list.grapeCount}+'알'"></span>
+      </p>
+      <p class="info-left">
+        <strong>🥇 회원등급</strong>: <span th:text="${list.rank}"></span>
+      </p>
+      <p class="info-left">
+      <!-- 회원등급 모달 창-->
+      <span onclick="showScoreGuide()"  class="grade-info-btn">점수 안내</span>
+      <!-- 회원등급 글자 클릭 -->
+      <span onclick="showRankGuide()"  class="grade-info-btn">회원등급 안내</span>
+      </p>
+
+      <!-- 등급 안내 모달 -->
+      <div id="guideModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+          background:white; padding:20px; border-radius:15px; width:400px; box-shadow:0 4px 12px rgba(0,0,0,0.2); z-index:9999;">
+        <div id="modalContent"></div>
+        <button onclick="closeModal()" style="margin-top:10px; padding:6px 12px; border:none; background:#f48aa5; color:white; border-radius:8px;">닫기</button>
+      </div>
+
+      <!-- 배경 어두운 오버레이 -->
+      <div id="overlay" onclick="closeModal()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+     background:rgba(0,0,0,0.4); z-index:9998;"></div>
+
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <a th:href="@{/UserPwChange}">비밀번호 변경</a>
+    <a th:href="@{/UserUpdate}">회원정보 수정</a>
+    <a th:href="@{/UserDelete}">회원탈퇴</a>
+  </div>
+</div>
+
+<!-- 모달창 스크립트 -->
+<script>
+  function showScoreGuide() {
+    const content = `
+      <h3 style="margin-top:0;">📌 점수 안내</h3>
+      <p style="font-weight: bold; font-size: 17px; background-color: #ffe6eb; margin-top: 20px;">
+        📍 현재 점수: <span id="score-value">[[${list.score}]]점</span>
+      </p>
+      <ul style="line-height:1.8;">
+        <li>🛒 아이템 구매: <b style="color:#81c784;">+4점</b></li>
+        <li>🦴 간식레시피 등록: <b style="color:#e57373;">+3점</b></li>
+        <li>🗨️ 커뮤니티 등록: <b style="color:#e57373;">+3점</b></li>
+        <li>📝 일기 등록: <b style="color:#e57373;">+3점</b></li>
+        <li>🗓️ 캘린더 등록: <b style="color:#e57373;">+3점</b></li>
+        <li>🧠 퀴즈 정답: <b style="color:#e57373;">+3점</b>, 오답: <b style="color:#64b5f6;">+1점</b></li>
+        <li>💬 댓글 작성: <b style="color:#64b5f6;">+1점</b></li>
+        <li>❤️ 좋아요 등록: <b style="color:#64b5f6;">+1점</b></li>
+      </ul>
+    `;
+    document.getElementById("modalContent").innerHTML = content;
+    openModal();
+  }
+
+  function showRankGuide() {
+    const content = `
+      <h3 style="margin-top:0;">🍇 회원 등급 안내</h3>
+      <ul style="line-height:1.8;">
+        <li>🌱 새싹포도: 0~39점</li>
+        <li>🍼 아기포도: 40~79점</li>
+        <li>🌿 청포도: 80~99점</li>
+        <li>🍇 보라포도: 100~119점</li>
+        <li>✨ 포도유망주: 120~149점</li>
+        <li>👑 포도왕: 150점 이상</li>
+      </ul>
+    `;
+    document.getElementById("modalContent").innerHTML = content;
+    openModal();
+  }
+
+  function openModal() {
+    document.getElementById("guideModal").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+  }
+
+  function closeModal() {
+    document.getElementById("guideModal").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+  }
+</script>
+
+<script th:inline="javascript">
+  if ([[${msg} != null]]) {
+    alert([[${msg}]]);
+  }
+
+  if ([[${error} != null]]) {
+    alert([[${error}]]);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{top::menu}"></div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>퀴즈 등록</title>
+  <style>
+    .container {
+      max-width: 1000px;
+      margin: 80px auto 100px auto;
+      background: #fff;
+      padding: 80px 80px;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Pretendard', sans-serif;
+      background-color: #fff6f6;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      padding: 40px 20px 80px;
+      box-sizing: border-box;
+      background-color: #ffffff;
+    }
+
+    h2 {
+      text-align: center;
+      color: #f48aa5;
+      font-size: 24px;
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      width: 28px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #555;
+      flex-shrink: 0;
+    }
+
+    .form-group input[type="text"],
+    .form-group select {
+      flex: 1;
+      padding: 12px 14px;
+      font-size: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #fffdfd;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #f48aa5;
+      box-shadow: 0 0 0 3px rgba(244, 138, 165, 0.2);
+    }
+
+    .form-actions {
+      margin-top: 32px;
+      text-align: center;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .form-actions button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .form-actions button[type="submit"] {
+      background-color: #f48aa5;
+      color: white;
+    }
+
+    .form-actions button[type="reset"] {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      color: #555;
+    }
+
+    @media (max-width: 480px) {
+      .form-group {
+        gap: 10px;
+      }
+      .form-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>📄 퀴즈 등록하기</h2>
+  <form th:action="@{/QuizInputSave}" method="post">
+    <div class="form-group">
+      <label for="quizQuestion">❓</label>
+      <input type="text" id="quizQuestion" name="quizQuestion" placeholder="문제 입력" required>
+    </div>
+
+    <div class="form-group">
+      <label for="quizOption1">①</label>
+      <input type="text" name="quizOption1" id="quizOption1" required>
+    </div>
+
+    <div class="form-group">
+      <label for="quizOption2">②</label>
+      <input type="text" name="quizOption2" id="quizOption2" required>
+    </div>
+
+    <div class="form-group">
+      <label for="quizOption3">③</label>
+      <input type="text" name="quizOption3" id="quizOption3" required>
+    </div>
+
+    <div class="form-group">
+      <label for="quizOption4">④</label>
+      <input type="text" name="quizOption4" id="quizOption4" required>
+    </div>
+
+    <div class="form-group">
+      <label for="quizAnswer">✅</label>
+      <select name="quizAnswer" id="quizAnswer" required>
+        <option value="">정답을 등록하세요.</option>
+        <option value="1">1번</option>
+        <option value="2">2번</option>
+        <option value="3">3번</option>
+        <option value="4">4번</option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit">📂 퀴즈 등록</button>
+      <button type="reset" onclick="location.href='/QuizOut'">❌ 등록 취소</button>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

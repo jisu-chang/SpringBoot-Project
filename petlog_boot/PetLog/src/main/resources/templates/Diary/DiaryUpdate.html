@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{top::menu}"></div>
+<head>
+  <meta charset="UTF-8">
+  <title>일기 수정</title>
+  <style>
+    body {
+      background-color: #fff6f6;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+ .container {
+  max-width: 100%;
+  margin: 80px auto 80px auto;
+  background: #fff;
+  padding: 24px 16px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+}
+
+    h2 {
+      text-align: center;
+      font-size: 1.5em;
+      color: #f48aa5;
+      font-weight: normal;
+      margin-top: 0;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      margin-bottom: 6px;
+      font-weight: bold;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="date"],
+    .form-group input[type="file"],
+    .form-group select,
+    .form-group textarea {
+      padding: 10px 14px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #fffdfd;
+      transition: all 0.2s ease-in-out;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      height: 120px;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: #f48aa5;
+      box-shadow: 0 0 0 3px rgba(244, 138, 165, 0.2);
+      outline: none;
+    }
+
+    .form-actions {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    input[type="submit"],
+    input[type="reset"] {
+      background-color: #f48aa5;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: normal;
+      margin: 0 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover,
+    input[type="reset"]:hover {
+      background-color: #db7093;
+    }
+
+    @media screen and (min-width: 768px) {
+      .container {
+        max-width: 1000px;
+        padding: 60px 80px;
+        margin-top: 90px;
+      }
+
+      h2 {
+        font-size: 26px;
+        margin-bottom: 30px;
+      }
+
+      .form-group {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .form-group label {
+        flex: 0 0 120px;
+        margin-bottom: 0;
+        font-size: 15px;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        flex: 1;
+        font-size: 15px;
+      }
+
+      input[type="submit"],
+      input[type="reset"] {
+        font-size: 15px;
+        padding: 12px 30px;
+        margin: 0 10px;
+      }
+    }
+  </style>
+
+</head>
+<body>
+<div class="container">
+  <h2>📔 일기 수정하기</h2>
+
+  <form th:action="@{/UpdateSave}" method="post" enctype="multipart/form-data"
+        onsubmit="return confirm('정말 수정하시겠습니까? 😊')"
+        th:object="${dto}">
+
+    <!-- 히든 이미지 파일명 -->
+    <input type="hidden" name="himage" th:value="*{diaryImage}" />
+    <!-- 히든으로 petId 전달 -->
+    <input type="hidden" name="petId" th:value="*{petId}" />
+
+    <div class="form-group">
+      <label for="diary_id">글번호</label>
+      <input type="text" id="diary_id" name="diaryId" th:value="*{diaryId}" readonly />
+    </div>
+
+    <div class="form-group">
+      <label for="diary_title">제목</label>
+      <input type="text" id="diary_title" name="diaryTitle" th:value="*{diaryTitle}" required />
+    </div>
+
+    <div class="form-group">
+      <label for="diary_date">날짜</label>
+      <input type="date" id="diary_date" name="diaryDate" th:value="*{diaryDate}" required />
+    </div>
+
+    <div class="form-group">
+      <label for="diary_image">이미지</label>
+      <img th:if="${dto.diaryImageName != null and !#strings.isEmpty(dto.diaryImageName)}"
+           th:src="@{'/diaryimg/' + ${dto.diaryImageName}}"
+           alt="일기 이미지"
+           style="max-width: 60%; max-height: 200px; height: auto; border-radius: 10px; margin-top: 20px;" />
+      <span th:unless="${dto.diaryImageName != null and !#strings.isEmpty(dto.diaryImageName)}">이미지 없음</span>
+      <input type="file" id="diary_image" name="diaryImage" />
+    </div>
+
+    <div class="form-group">
+      <label for="diary_content">내용</label>
+      <textarea id="diary_content" name="diaryContent" required th:text="*{diaryContent}"></textarea>
+    </div>
+
+    <div class="form-actions">
+      <input type="submit" value="💾 수정하기" />
+      <input type="reset" value="❌ 취소하기" onclick="history.back()" />
+    </div>
+  </form>
+</div>
+</body>
+</html>

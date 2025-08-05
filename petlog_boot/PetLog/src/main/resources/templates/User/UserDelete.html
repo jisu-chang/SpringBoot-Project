@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{top::menu}"></div>
+<head>
+    <meta charset="UTF-8">
+    <title>회원 탈퇴</title>
+    <style>
+        body {
+          padding-top: 100px; /* 기존보다 넉넉히 */
+        }
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        h2 {
+          display: block;
+          position: relative;
+          z-index: 10;
+          color: #d64569;
+          font-size: 22px;
+          margin-bottom: 30px;
+          text-align: center;
+        }
+
+        .card {
+            background: #fff7f9;
+            padding: 14px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        .card-title {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .card-value {
+            font-size: 17px;
+            font-weight: 700;
+            color: #d64569;
+        }
+
+        .list-section {
+            margin-bottom: 24px;
+        }
+
+        .list-section h4 {
+            font-size: 15px;
+            margin-bottom: 6px;
+            color: #f48aa5;
+        }
+
+        .list-box {
+            border-top: 1px solid #ffe3ea;
+            padding-top: 6px;
+            font-size: 14px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .list-box li {
+            padding: 4px 0;
+            border-bottom: 1px dashed #f8d6de;
+        }
+
+        .btn-wrap {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .btn {
+            background-color: #f48aa5;
+            color: white;
+            padding: 12px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #e36488;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container">
+    <h2>정말 탈퇴하시겠습니까?</h2>
+
+    <div class="info-cards">
+        <div class="card">
+            <div class="card-title">아이디</div>
+            <div class="card-value" th:text="${user.userLoginId}"></div>
+        </div>
+        <div class="card">
+            <div class="card-title">이름</div>
+            <div class="card-value" th:text="${user.name}"></div>
+        </div>
+        <div class="card">
+            <div class="card-title">포도알</div>
+            <div class="card-value" th:text="${user.grapeCount} + '개'"></div>
+        </div>
+        <div class="card">
+            <div class="card-title">댓글</div>
+            <div class="card-value" th:text="${#lists.size(myComment)} + '개'"></div>
+        </div>
+        <div class="card">
+            <div class="card-title">좋아요</div>
+            <div class="card-value" th:text="${#lists.size(myLike)} + '개'"></div>
+        </div>
+        <div class="card">
+            <div class="card-title">아이템</div>
+            <div class="card-value" th:text="${#lists.size(myItems)} + '개'"></div>
+        </div>
+    </div>
+
+    <div class="list-section" th:if="${#lists.size(myPost) > 0}">
+        <h4>📝 게시글 목록</h4>
+        <ul class="list-box">
+            <li th:each="post : ${myPost}" th:text="${post.postTitle}"></li>
+        </ul>
+    </div>
+
+    <div class="list-section" th:if="${#lists.size(myDiary) > 0}">
+        <h4>📔 작성한 일기</h4>
+        <ul class="list-box">
+            <li th:each="diary : ${myDiary}" th:text="${diary.diaryTitle}"></li>
+        </ul>
+    </div>
+
+    <div class="list-section" th:if="${#lists.size(mySnack) > 0}">
+        <h4>🍪 간식 레시피</h4>
+        <ul class="list-box">
+            <li th:each="snack : ${mySnack}" th:text="${snack.snackTitle}"></li>
+        </ul>
+    </div>
+
+    <div class="btn-wrap">
+        <form th:action="@{/user/withdraw}" method="post">
+            <button type="submit" class="btn">탈퇴</button>
+        </form>
+        <form th:action="@{/MyPage}" method="get">
+            <button type="submit" class="btn">돌아가기</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

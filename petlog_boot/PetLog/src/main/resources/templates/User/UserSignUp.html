@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{top::menu}"></div>
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입</title>
+  <style>
+    body {
+      background-color: #fff6f6;
+      font-family: 'Pretendard', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh; /* 화면 전체 높이 확보 */
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="file"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+      background-color: #fffdfd;
+    }
+
+    input[type="file"] {
+      padding: 8px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-right: 10px;
+    }
+
+    .btn-primary {
+      background-color: #f48aa5;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #db7093;
+    }
+
+    .btn-reset {
+      background-color: #e0e0e0;
+      color: #333;
+    }
+
+    .btn-reset:hover {
+      background-color: #cfcfcf;
+    }
+
+    .kakao-login {
+      margin-bottom: 30px;
+    }
+
+    .kakao-login img {
+      width: 100%;
+      max-width: 320px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    p {
+      color: red;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+  .kakao-button {
+    background-color: #FEE500;
+    color: #3c1e1e;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    max-width: 320px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin: 0 auto 30px auto;
+    display: block;
+  }
+
+  .kakao-button:hover {
+    background-color: #ffd600;
+  }
+
+  .kakao-button::before {
+    content: "🐤 ";
+  }
+   #pwRules {
+    display: none;
+    list-style: none;
+    padding-left: 0;
+    font-size: 13px;
+    margin-top: 6px;
+  }
+
+  /* 포커스 시 조건 보이기 */
+  #password:focus + #pwRules {
+    display: block;
+  }
+
+  /* 조건 만족 여부 색상 */
+  #pwRules li {
+    color: red;
+  }
+
+  #pwRules li.valid {
+    color: green;
+    font-weight: bold;
+  }
+    .check-btn {
+  background-color: #f48aa5;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.check-btn:hover {
+  background-color: #db7093;
+}
+
+#idCheckResult {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 13px;
+}
+    .id-check-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.id-check-wrapper input {
+  flex: 1;
+}
+
+.check-btn {
+  background-color: #f48aa5;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="kakao-login">
+    <form action="/oauth2/authorization/kakao" method="get">
+      <button type="submit" class="kakao-button">카카오로 회원가입</button>
+    </form>
+  </div>
+
+  <form id="signUpForm" th:action="@{/signUpSave}" method="post" th:object="${userDTO}" enctype="multipart/form-data">
+    <input type="hidden" name="email" id="fullEmail" />
+    <input type="hidden" name="phoneCheckStatus" id="phoneCheckStatus" value="false" />
+
+    <div class="form-group">
+      <label for="userLoginId">아이디</label>
+      <div class="id-check-wrapper">
+      <input type="text" id="userLoginId" th:field="*{userLoginId}" required/>
+        <button type="button" class="check-btn"  onclick="checkId()">중복 확인</button> <!-- 중복 확인 버튼 -->
+      </div>
+      <span id="idCheckResult" style="margin-left:10px;"></span> <!-- 중복 결과 출력 -->
+      <input type="hidden" id="idCheckStatus" name="idCheckStatus" value="false" /> <!-- 중복검사 없이 회원가입 진행 시 필요-->
+      <div th:if="${idError}" th:text="${idError}" style="color:red;"></div> <!-- 에러메세지 출력용 -->
+        <p th:if="${#fields.hasErrors('userLoginId')}" th:errors="*{userLoginId}"></p> <!-- 유효성 검사 메시지 -->
+    </div>
+
+    <div class="form-group">
+      <label for="password">패스워드</label>
+      <input type="password" id="password" th:field="*{password}" oninput="validatePassword()" required />
+      <ul id="pwRules">
+        <li id="rule-length">8~20자</li>
+        <li id="rule-combo">영문자 + 숫자 조합</li>
+        <li id="rule-space">공백 없음</li>
+      </ul>
+    </div>
+
+    <div class="form-group">
+      <label for="passwordCheck">패스워드 확인</label>
+      <input type="password" id="passwordCheck" th:field="*{passwordCheck}" required oninput="checkPasswordMatch()"/>
+      <p th:if="${#fields.hasErrors('passwordCheck')}" th:errors="*{passwordCheck}"></p>
+      <div th:if="${passwordMismatch}" style="color: red;">[[${passwordMismatch}]]</div>
+      <span id="passwordMatchMsg"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="name">이름</label>
+      <input type="text" id="name" th:field="*{name}" required />
+      <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">전화번호</label>
+      <input type="text" id="phone" name="phone" placeholder="전화번호는 010으로 시작하는 숫자 11자리여야 합니다."
+             maxlength="13" oninput="autoFormatPhone(this)"  required />
+
+    </div>
+
+    <div class="form-group">
+      <label for="emailId">이메일</label>
+      <div style="display: flex; gap: 10px;">
+        <input type="text" id="emailId" name="emailId" placeholder="이메일 아이디 입력" required
+               style="flex: 1;" />
+
+        <span>@</span>
+
+        <select id="emailDomain" name="emailDomain" required style="flex: 1;">
+          <option value="">도메인 선택</option>
+          <option value="naver.com">naver.com</option>
+          <option value="gmail.com">gmail.com</option>
+          <option value="daum.net">daum.net</option>
+          <option value="nate.com">nate.com</option>
+          <option value="direct">직접 입력</option>
+        </select>
+
+        <input type="text" id="emailCustom" name="emailCustom"
+               style="flex: 1; display: none;" placeholder="직접 입력" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="profileimg">프로필 이미지</label>
+      <input type="file" id="profileimg" name="profileimg"/>
+      <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+      <div th:if="${imageError}" style="color: red;">프로필 이미지를 다시 업로드해주세요.</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">저장</button>
+    <button type="reset" class="btn btn-reset" onclick="location.href='/'">취소</button>
+  </form>
+</div>
+
+<!-- 아이디 중복검사 -->
+<script>
+  function checkId() {
+     const userLoginId = document.getElementById("userLoginId").value;
+     if (userLoginId === "") {
+         alert("아이디를 입력해주세요.");
+         return;
+     }
+
+     fetch(`/idCheck?userLoginId=${encodeURIComponent(userLoginId)}`)
+         .then(response => response.text())
+         .then(data => {
+             if (data === "duplicate") {
+                 alert("이미 사용 중인 아이디입니다.");
+                 document.getElementById("idCheckStatus").value = "false";
+                 document.getElementById("idCheckResult").textContent = "이미 사용 중인 아이디 입니다.";
+                 document.getElementById("idCheckResult").style.color = "red";
+             } else {
+                 alert("사용 가능한 아이디입니다.");
+                 document.getElementById("idCheckStatus").value = "true";
+                 document.getElementById("idCheckResult").textContent = "사용 가능한 아이디 입니다.";
+                 document.getElementById("idCheckResult").style.color = "green";
+             }
+         })
+         .catch(err => {
+             console.error("중복 검사 중 에러 발생:", err);
+         });
+ }
+</script>
+
+<!-- 비밀번호 일치 검사 -->
+<script>
+  function checkPasswordMatch() {
+    const pw = document.getElementById("password").value;
+    const pwCheck = document.getElementById("passwordCheck").value;
+    const msg = document.getElementById("passwordMatchMsg");
+
+    if (pwCheck === "") {
+      msg.textContent = "";
+      return;
+    }
+
+    if (pw === pwCheck) {
+      msg.textContent = "비밀번호가 일치합니다.";
+      msg.style.color = "green";
+    } else {
+      msg.textContent = "비밀번호가 일치하지 않습니다.";
+      msg.style.color = "red";
+    }
+  }
+</script>
+
+<!-- 비밀번호 유효성 검사 -->
+<script>
+  function validatePassword() {
+    const pw = document.getElementById("password").value;
+
+    const lengthCheck = pw.length >= 8 && pw.length <= 20;
+    const comboCheck = /[A-Za-z]/.test(pw) && /\d/.test(pw);
+    const spaceCheck = !/\s/.test(pw);
+
+    // 조건별 항목 색상 반영
+    document.getElementById("rule-length").classList.toggle("valid", lengthCheck);
+    document.getElementById("rule-combo").classList.toggle("valid", comboCheck);
+    document.getElementById("rule-space").classList.toggle("valid", spaceCheck);
+  }
+</script>
+
+<!-- 전화번호 유효성 검사 -->
+<script>
+  function autoFormatPhone(input) {
+    let value = input.value.replace(/[^0-9]/g, "");
+
+    // 010 자동 시작
+    if (!value.startsWith("010")) {
+      value = "010" + value;
+    }
+
+    if (value.length <= 3) {
+      input.value = value;
+    } else if (value.length <= 7) {
+      input.value = value.slice(0, 3) + "-" + value.slice(3);
+    } else if (value.length <= 11) {
+      input.value = value.slice(0, 3) + "-" + value.slice(3, 7) + "-" + value.slice(7);
+    } else {
+      input.value = value.slice(0, 3) + "-" + value.slice(3, 7) + "-" + value.slice(7, 11);
+    }
+  }
+</script>
+
+<!-- 이메일 유효성 검사 -->
+<script>
+  const domainSelect = document.getElementById("emailDomain");
+  const customInput = document.getElementById("emailCustom");
+
+  domainSelect.addEventListener("change", function () {
+    if (this.value === "direct") {
+      customInput.style.display = "inline-block";
+      customInput.required = true;
+    } else {
+      customInput.style.display = "none";
+      customInput.required = false;
+    }
+  });
+</script>
+
+<!--서버 전송시 이메일 합쳐서 보내기 -->
+<script>
+  document.getElementById("signUpForm").addEventListener("submit", function () {
+    const id = document.getElementById("emailId").value;
+    const domain = domainSelect.value === "direct"
+      ? customInput.value
+      : domainSelect.value;
+
+    document.getElementById("fullEmail").value = id + "@" + domain;
+  });
+</script>
+</body>
+</html>

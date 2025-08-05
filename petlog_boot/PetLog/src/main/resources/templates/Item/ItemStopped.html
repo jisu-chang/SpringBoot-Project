@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="~{top::menu}"></div>
+  <meta charset="UTF-8">
+  <title>🎈 판매 종료 아이템</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+        background-color: #fff6f6;
+        margin: 0;
+        padding: 0;
+        color: #333;
+        padding-top: 90px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #f48aa5;
+        font-weight: normal;
+        font-size: 1.8em;
+        margin-bottom: 30px;
+    }
+
+    .table-wrapper {
+        background-color: white;
+        width: 95%;
+        max-width: 1000px;
+        margin: 0px auto 40px auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        padding: 15px;
+    }
+
+    .card-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px; /* 카드 간격 */
+        margin-top: 20px;
+    }
+
+    .item-card {
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        padding: 15px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .item-card img {
+        max-width: 100px;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .item-card .item-name {
+        font-weight: bold;
+        font-size: 1.1em;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    .item-card .item-details {
+        font-size: 0.9em;
+        color: #777;
+        margin-bottom: 15px;
+    }
+
+    .item-card .card-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: auto;
+    }
+
+    .text-btn {
+        background: none;
+        border: none;
+        color: #3e8e41;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 0.75em;
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        background-color: #f8f8f8;
+    }
+
+    .text-btn:hover {
+        opacity: 0.7;
+        text-decoration: none;
+        background-color: #eee;
+    }
+
+    .no-data {
+        text-align: center;
+        color: #c0392b;
+        font-weight: bold;
+        padding: 40px 0;
+        font-size: 1.1em;
+    }
+
+    @media screen and (max-width: 390px) {
+        body {
+            padding-top: 60px;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .table-wrapper {
+            padding: 10px;
+            margin: 0px auto 30px auto;
+        }
+
+        .card-container {
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .item-card {
+            padding: 10px;
+        }
+
+        .item-card img {
+            max-width: 80px;
+        }
+
+        .item-card .item-name {
+            font-size: 1em;
+        }
+
+        .item-card .item-details {
+            font-size: 0.8em;
+        }
+
+        .item-card .card-actions .text-btn {
+            font-size: 0.7em;
+            padding: 4px 8px;
+        }
+    }
+  </style>
+</head>
+<body>
+
+<div class="table-wrapper">
+  <h2 style="color: #f48aa5">🎈 판매 종료 아이템</h2>
+
+  <div th:if="${#lists.isEmpty(list)}" class="no-data">
+    판매 종료된 아이템이 없습니다.
+  </div>
+
+  <div th:if="${not #lists.isEmpty(list)}" class="card-container">
+    <th:block th:each="item : ${list}">
+      <div class="item-card">
+        <img th:src="@{'/image/' + ${item.itemImageName}}" alt="아이템 이미지">
+        <div class="item-name" th:text="${item.itemName}"></div>
+        <div class="item-details" th:text="${item.itemCategory}"></div>
+        <div class="card-actions">
+          <form th:action="@{/itemRestore}" method="post" style="display:inline;">
+            <input type="hidden" name="itemId" th:value="${item.itemId}">
+            <button type="submit" class="text-btn">판매 시작 ⭕</button>
+          </form>
+        </div>
+      </div>
+    </th:block>
+  </div>
+</div>
+
+</body>
+</html>

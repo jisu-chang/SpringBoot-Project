@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{top::menu}"></div>
+<head>
+    <meta charset="UTF-8">
+    <title>Q&A 상세보기</title>
+    <style>
+        body {
+          font-family: "Pretendard", sans-serif;
+          background-color: #fff6f6;
+          margin: 0;
+          padding: 0;
+          color: #333;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+        }
+
+        .qna-box {
+          width: 100%;
+          max-width: 800px;
+          margin: 40px auto;
+          background-color: #fff;
+          padding: 30px;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .qna-title {
+          font-size: 1.8em;
+          color: #f48aa5;
+          text-align: center;
+          margin-bottom: 20px;
+        }
+
+        .qna-meta {
+          display: flex;
+          justify-content: flex-start;
+          gap: 20px;
+          font-size: 14px;
+          margin-bottom: 20px;
+          flex-wrap: wrap;
+        }
+
+        .qna-meta {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+          flex-wrap: wrap;
+        }
+
+        .qna-meta .left-meta span,
+        .qna-meta .right-meta span {
+          display: inline-flex;
+          align-items: center;
+          margin-right: 10px;
+          font-size: 14px;
+          color: #555;
+        }
+
+        .qna-meta i {
+          margin-right: 5px;
+          color: #888;
+        }
+
+        .meta-divider {
+          border: none;
+          border-top: 1px solid #f4c6d2; /* 연한 핑크 */
+          margin: 10px 0 20px 0;
+        }
+
+        .qna-content-box {
+          background-color: #FFFAFA;
+          padding: 20px;
+          border-radius: 10px;
+          margin-bottom: 30px;
+          color: #333;
+          line-height: 1.6;
+          white-space: pre-wrap;
+        }
+
+        .admin-answer-box {
+          background-color: #F5FFFA;
+          padding: 20px;
+          border-radius: 10px;
+          margin-bottom: 30px;
+        }
+
+        .admin-answer-box h3 {
+          color: #d66b7d;
+          margin-bottom: 10px;
+          font-size: 16px;
+        }
+
+        .admin-form label {
+          display: block;
+          font-weight: bold;
+          color: #444;
+          margin-bottom: 6px;
+          font-size: 14px;
+        }
+
+        .admin-form textarea,
+        .admin-form select {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 15px;
+          border-radius: 6px;
+          border: 1px solid #ccc;
+          font-size: 14px;
+        }
+
+        .admin-form button {
+          background-color: #ffc1cc;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 8px;
+          font-weight: bold;
+          cursor: pointer;
+          color: #333;
+          transition: background-color 0.3s;
+        }
+
+        .admin-form button:hover {
+          background-color: #fba0b2;
+        }
+
+        .btn-wrap {
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+          margin-top: 20px;
+        }
+
+        .btn-wrap button {
+          padding: 8px 16px;
+          font-size: 14px;
+          border: none;
+          background-color: #ffe3e3;
+          color: #333;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+
+        .btn-wrap button:hover {
+          background-color: #e0bfc7;
+        }
+    </style>
+    <!-- 아이콘 사용하려면 FontAwesome 연결 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+<div class="qna-box">
+    <h2 th:text="${dto.qnaTitle}" class="qna-title">Q&A 제목</h2>
+
+    <div class="qna-meta">
+        <div class="left-meta">
+            <span><i class="fa-solid fa-user"></i> <b th:text="${dto.user.userLoginId}">작성자</b></span>
+        </div>
+        <div class="right-meta">
+            <span><i class="fa-solid fa-calendar-days"></i> <b th:text="${dto.qnaDate}">작성일</b></span>
+            <span><i class="fa-solid fa-thumbtack"></i> <b th:text="${dto.qnaStatus}">상태</b></span>
+        </div>
+    </div>
+    <hr class="meta-divider"/>
+    <div class="qna-content-box">
+        <p th:text="${dto.qnaContent}">문의 내용</p>
+    </div>
+
+    <!-- 답변 출력 영역 (모두에게 보임) -->
+    <div th:if="${dto.qnaAnswer != null}" class="admin-answer-box">
+        <h3>📢 관리자 답변</h3>
+        <div th:text="${dto.qnaAnswer}" style="white-space: pre-wrap; line-height: 1.6;"></div>
+    </div>
+
+    <!-- 관리자만 보이는 답변 작성 폼 -->
+    <div th:if="${session.userRole == 'admin'}" class="admin-form">
+        <form th:action="@{/updateAnswer}" method="post">
+            <input type="hidden" name="qnaId" th:value="${dto.qnaId}" />
+
+            <label for="qna_answer">답변 내용</label>
+            <textarea name="qnaAnswer" id="qna_answer" rows="5" th:text="${dto.qnaAnswer}"></textarea>
+
+            <label for="qna_status">문의 상태</label>
+            <select name="qnaStatus" id="qna_status">
+                <option th:value="처리중" th:selected="${dto.qnaStatus == '처리중'}">처리중</option>
+                <option th:value="완료" th:selected="${dto.qnaStatus == '완료'}">완료</option>
+            </select>
+
+            <button type="submit">답변 등록</button>
+        </form>
+    </div>
+
+    <!-- 버튼 영역 -->
+    <div class="btn-wrap">
+        <div th:if="${session.userId == dto.userId}">
+            <button th:if="${dto.qnaAnswer != null}"
+                    onclick="alert('답변이 달린 글은 수정할 수 없습니다.'); return false;">수정</button>
+            <button th:if="${dto.qnaAnswer == null}"
+                    th:onclick="|location.href='@{QnAUpdate(qnaId=${dto.qnaId})}'|">수정</button>
+
+            <button th:if="${dto.qnaAnswer != null}"
+                    onclick="alert('답변이 달린 글은 삭제할 수 없습니다.'); return false;">삭제</button>
+            <button th:if="${dto.qnaAnswer == null}"
+                    th:onclick="|if(confirm('삭제하시겠습니까?')) location.href='@{/QnADelete(qnaId=${dto.qnaId})}'|">삭제</button>
+        </div>
+        <button th:onclick="|location.href='@{/QnAOut}'|">목록</button>
+    </div>
+</div>
+</body>
+</html>

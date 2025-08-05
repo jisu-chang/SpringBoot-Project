@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{top::menu}"></div>
+<head>
+    <meta charset="UTF-8">
+    <title>일기 삭제하기</title>
+    <style>
+        body {
+          background-color: #fff6f6;
+          margin: 0;
+          padding: 0;
+          color: #333;
+        }
+
+.container {
+  max-width: 100%;
+  margin: 80px auto;
+  background-color: #fff;
+  padding: 20px 16px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+}
+
+        h2 {
+          text-align: center;
+          color: #f48aa5;
+          font-size: 1.4em;
+          margin-bottom: 24px;
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 10px;
+          font-size: 14px;
+        }
+
+        th, td {
+          padding: 10px 8px;
+          font-size: 0.9em;
+          border-bottom: 1px solid #eee;
+          text-align: left;
+          word-break: break-word;
+        }
+
+        th {
+          background-color: #fff0f4;
+          color: #555;
+          font-weight: bold;
+          width: 30%;
+          text-align: center;
+        }
+
+        td img {
+          max-width: 80px;
+          height: auto;
+          border-radius: 8px;
+        }
+
+        textarea,
+        input[type="text"] {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          font-size: 14px;
+          box-sizing: border-box;
+
+        }
+
+        .form-actions {
+          text-align: center;
+          margin-top: 24px;
+        }
+
+        input[type="submit"],
+        input[type="reset"] {
+          background-color: #ffe1e1;
+          color: #333;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 10px;
+          font-size: 14px;
+          cursor: pointer;
+          margin: 0 6px;
+          transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover,
+        input[type="reset"]:hover {
+          background-color: #ffd2d2;
+        }
+
+        @media screen and (min-width: 768px) {
+          .container {
+            max-width: 800px;
+            padding: 40px 60px;
+             margin-top: 90px;
+          }
+
+          h2 {
+            font-size: 24px;
+          }
+
+          th, td {
+            font-size: 15px;
+            padding: 14px 12px;
+          }
+
+          td img {
+            max-width: 100px;
+          }
+
+          input[type="submit"],
+          input[type="reset"] {
+            font-size: 15px;
+            padding: 10px 24px;
+            margin: 0 8px;
+          }
+        }
+    </style>
+
+    <script>
+        function confirm_delete() {
+          return confirm("정말 삭제하시겠습니까?😥");
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h2>📕 일기 삭제하기</h2>
+
+    <form th:action="@{/Delete}" method="post" onsubmit="return confirm_delete()" enctype="multipart/form-data">
+        <input type="hidden" name="diaryId" th:value="${dto.diaryId}">
+        <input type="hidden" name="diaryTitle" th:value="${dto.diaryTitle}">
+        <input type="hidden" name="diaryDate" th:value="${dto.diaryDate}">
+        <input type="hidden" name="diaryContent" th:value="${dto.diaryContent}">
+        <input type="hidden" name="himage" th:value="${dto.diaryImageName}">
+
+        <table>
+            <tr style="border-top: 1px solid #f0f0f0;">
+                <th>글번호</th>
+                <td><input type="text" th:value="${dto.diaryId}" readonly></td>
+            </tr>
+            <tr>
+                <th>제목</th>
+                <td><input type="text" th:value="${dto.diaryTitle}" readonly></td>
+            </tr>
+            <tr>
+                <th>날짜</th>
+                <td><input type="text" th:value="${dto.diaryDate}" readonly></td>
+            </tr>
+            <tr>
+                <th>이미지</th>
+                <td>
+                    <img th:if="${dto.diaryImageName != null and !#strings.isEmpty(dto.diaryImageName)}"
+                         th:src="@{'/diaryimg/' + ${dto.diaryImageName}}"
+                         alt="일기 이미지"
+                         style="max-width: 60%; max-height: 200px; height: auto; border-radius: 10px; margin-top: 20px;" />
+                    <span th:unless="${dto.diaryImageName != null and !#strings.isEmpty(dto.diaryImageName)}">이미지 없음</span>
+                </td>
+            </tr>
+            <tr>
+                <th>내용</th>
+                <td><textarea rows="6" readonly th:text="${dto.diaryContent}"></textarea></td>
+            </tr>
+        </table>
+
+        <div class="form-actions">
+            <input type="submit" value="🗑️ 삭제하기">
+            <input type="reset" value="❌ 취소하기" onclick="history.back()">
+        </div>
+    </form>
+</div>
+</body>
+</html>

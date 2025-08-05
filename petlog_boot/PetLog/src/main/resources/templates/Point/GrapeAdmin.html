@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="utf-8">
+<div th:replace="~{top::menu}"></div>
+<head>
+  <meta charset="UTF-8">
+  <title>포도알 관리</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #fff6f6;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      text-align: center;
+      padding-top: 90px;
+    }
+
+    .table-wrapper {
+      width: 95%;
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 20px 15px;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      font-size: 22px;
+      color: #f48aa5;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      font-weight: bold;
+      margin: 12px 0 5px 0;
+      font-size: 14px;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      padding: 9px 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    .message {
+      color: green;
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .form-actions {
+      margin-top: 25px;
+    }
+
+    input[type="submit"] {
+      background-color: #ffe1e1;
+      color: #444;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      margin: 0 8px;
+      transition: background-color 0.3s;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #ffd2d2;
+    }
+
+    .btn-rank-view {
+      background-color: #f48aa5;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-weight: 500;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    .btn-rank-view:hover {
+      background-color: #db7093;
+      transform: translateY(-2px);
+    }
+
+
+    @media screen and (max-width: 390px) {
+      body {
+        padding-top: 60px;
+      }
+
+      .table-wrapper {
+        padding: 15px 10px;
+        margin: 0 auto 30px auto;
+      }
+
+      h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
+
+      label {
+        font-size: 13px;
+        margin: 10px 0 4px 0;
+      }
+
+      select, input[type="number"] {
+        padding: 8px 9px;
+        font-size: 13px;
+      }
+
+      .message {
+        font-size: 13px;
+      }
+
+      .form-actions {
+        margin-top: 20px;
+      }
+
+      input[type="submit"] {
+        padding: 8px 16px;
+        font-size: 13px;
+        margin: 0 5px;
+      }
+
+      .btn-rank-view {
+          width: auto;
+          padding: 9px 20px;
+          font-size: 13px;
+          margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="table-wrapper">
+
+  <h2>🍇 포도알 관리</h2>
+
+  <p th:if="${message}" class="message" th:text="${message}"></p>
+
+  <form th:action="@{/Point/GrapeAdmin}" method="post">
+    <label for="user_id1">회원 선택</label>
+    <select name="user_id1" id="user_id1" required>
+      <option value="">-- 선택하세요 --</option>
+      <th:block th:each="user : ${list}">
+        <option th:value="${user.userId}"
+                th:text="${user.userLoginId + ' (ID: ' + user.userId + ', 🍇: ' + user.grapeCount + '개)'}"></option>
+      </th:block>
+    </select>
+
+    <label for="grape_amount">포도알 수 (EX. 1 = 지급, -1 = 차감)</label>
+    <input type="number" id="grape_amount" name="grape_amount" required>
+
+    <div class="form-actions">
+      <input type="submit" value="적용">
+    </div>
+  </form>
+
+  <form th:action="@{/Point/GrapeRank}" method="get" style="margin-top: 20px; text-align: center;">
+    <input type="submit" value="회원별 포도알 보기 🍇" class="btn-rank-view">
+  </form>
+
+</div>
+
+</body>
+
+</html>
