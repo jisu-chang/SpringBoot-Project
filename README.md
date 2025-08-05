@@ -4,15 +4,18 @@
 - `PetLog_Boot/` : Spring Boot 기반 리팩토링 및 기능 확장 버전
 - `6조_PetLog_박다솜_창지수.pdf` : 팀 보고서
 
-  <br>
+<br>
 
 현재 프로젝트는 Spring MVC 기반 PetLog 프로젝트의 **리팩토링 버전**입니다.  
 기존 프로젝트는 [Spring MVC 프로젝트](https://github.com/jisu-chang/spring-project)에서 확인할 수 있습니다.
 
 <br>
+
 ---
 
 ## 🐶 PetLog Web Project (Spring + Spring Boot 통합)
+
+<br>
 
 Java와 Spring Framework 기반으로 개발한 웹 애플리케이션입니다.  
 초기에는 Spring MVC 구조로 시작하여, 이후 Spring Boot 기반으로 확장하며  
@@ -55,7 +58,6 @@ Java와 Spring Framework 기반으로 개발한 웹 애플리케이션입니다.
   - 모바일 웹에 최적화된 뷰 구성
   - 해상도별 스타일 적용(CSS 미디어 쿼리)
 - 전체 CSS 모듈화 및 UI 통일성 개선
-<br>
 
 ---
 
@@ -84,12 +86,13 @@ PC 화면
 | Build Tool        | Maven                              | Gradle                           |
 | IDE               | Eclipse / IntelliJ IDEA            | IntelliJ IDEA                    |
 | Version Control   | Git, GitHub                        | Git, GitHub                      |
-<br>
 
 ---
 
 
 ## 🙋‍♀️ 맡은 역할 및 구현 내용
+
+<br>
 
 - 공지사항 / 커뮤니티 게시판 기능 전체 구현
 - QnA 시스템 구축: 문의 작성 → 관리자 답변 → 상태 관리 흐름 설계
@@ -113,6 +116,8 @@ PC 화면
 
 ## 🎯 추가 개선 및 보완 의지
 
+<br>
+
 - Spring 프로젝트에서 구현하지 못했던 기능(카카오 로그인, 회원 탈퇴, 회원 등급 등)을 Spring Boot 프로젝트에서 보완하였습니다.
 - 향후 추가하고 싶은 기능:
   - 점수 + 활동지표 기반의 회원 등급 세분화
@@ -127,6 +132,8 @@ PC 화면
 
 
 ## ✨ 느낀 점
+
+<br>
 
 이번 프로젝트는 단순히 기능을 구현하는 것을 넘어,  
 하나의 서비스를 구성하는 전체 흐름을 고민한 경험이었습니다.  
