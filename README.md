@@ -6,7 +6,7 @@
 
   
 
-현재 프로젝트는 **Spring MVC 기반 PetLog 프로젝트**의 리팩토링 버전입니다.  
+현재 프로젝트는 Spring MVC 기반 PetLog 프로젝트의 **리팩토링 버전**입니다.  
 기존 프로젝트는 [Spring MVC 프로젝트](https://github.com/jisu-chang/spring-project)에서 확인할 수 있습니다.
 
 
